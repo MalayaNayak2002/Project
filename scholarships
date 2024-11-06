@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Scholarships</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            text-decoration: underline;
+        }
+
+        /* Form Section */
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Country List Dropdown */
+        #country-list {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            display: none; /* Hide initially */
+        }
+
+        #country-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+
+        #country-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        #country-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Scholarship Results Section */
+        .results-section {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        #scholarship-results div {
+            margin-bottom: 15px;
+        }
+
+        #scholarship-results h4 {
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        /* Links */
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>International Scholarships</h1>
+        
+        <div class="content">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="exam-status">Have you appeared for TOEFL or GRE?</label>
+                    <select id="exam-status">
+                        <option value="">-- Select an option --</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+
+                <!-- Country Search Section -->
+                <div class="form-group" id="country-search-section" style="display: none;">
+                    <label for="country-search">Enter Country Name:</label>
+                    <input type="text" id="country-search" placeholder="Type a country name..." onkeyup="filterCountries()">
+                    <ul id="country-list"></ul>
+                </div>
+
+                <!-- Check Eligibility Button -->
+                <div class="form-group">
+                    <button id="check-button" onclick="checkEligibility()">Check Availability</button>
+                </div>
+
+                <!-- Show Scholarships Button -->
+                <div class="form-group" id="show-scholarships-section" style="display: none;">
+                    <button id="show-scholarships-button" onclick="showScholarships()">Show Scholarships</button>
+                </div>
+
+                <!-- Scholarship Results Section -->
+                <div class="results-section" id="scholarship-section" style="display: none;">
+                    <h3>Available Scholarships</h3>
+                    <div id="scholarship-results"></div>
+                </div>
+            </div>
+
+            <!-- Result Display Section -->
+            <div id="result" class="info"></div>
+        </div>
+    </div>
+
+    <script>
+        const scholarshipsData = {
+            Australia: [
+                { name: "1.Australia Awards Scholarships",degree:"Undergraduate and postgraduate.", details: "Fully funded scholarships for students from eligible countries.", link: "https://www.dfat.gov.au/people-to-people/australia-awards" },
+                { name: "2.Endeavour Scholarships",degree: "All levels (from certificate to PhD).", details: "For international students to undertake study, research, or professional development in Australia.", link: "https://internationaleducation.gov.au" }
+            ],
+            Canada: [
+                { name: "1.Vanier Canada Graduate Scholarships",degree:"Master’s and Doctoral", details: "Supports doctoral students in various disciplines.", link: "https://vanier.gc.ca" },
+                { name: "2.Banting Postdoctoral Fellowships",degree:"Master’s and Doctoral", details: "Provides funding for postdoctoral researchers.", link: "https://banting.fellowships-bourses.gc.ca" }
+            ],
+            Japan: [
+                { name: "1.MEXT Scholarships",degree:"Undergraduate, Master's, PhD, and specialized training programs", details: "Provides various scholarship opportunities for international students studying in Japan.", link: "https://www.studyinjapan.go.jp/en/planning/scholarship/" },
+                {name: "2.Honjo International Scholarship Foundation",degree:"Master's and PhD",details: "International students with high academic achievements, studying in Japan, and with a clear career goal related to international collaboration",link: "https://www.hisf.or.jp/"},
+                {name: "3.ADB Japan Scholarship Program",degree:"Master's degree in areas related to economics, management, science, and technology",details: "Students from ADB member countries pursuing graduate studies; must have work experience and plans to contribute to their home country's development",link: "https://www.adb.org/what-we-do/funds/japan-scholarship-program-jsp"}
+            ],
+            UnitedKingdom: [
+                { name: "1.Chevening Scholarships",degree:"Masters", details: "Provides scholarships for one-year master’s degrees in the UK.", link: "https://www.chevening.org" },
+                { name: "2.Commonwealth Scholarships",degree: "Masters and PhD", details: "Supports students from Commonwealth countries to study in the UK.", link: "https://cscuk.fcdo.gov.uk" }
+            ],
+            UnitedStates: [
+                { name: "1.Fulbright Program",degree:"Master’s and PhD", details: "Offers full scholarships for graduate studies in the U.S.", link: "https://foreign.fulbrightonline.org" },
+                {name: "2.MPOWER Global Citizen Scholarship",degree:"Bachelor’s, Master’s, and PhD",details: "Applicants must be international students enrolled at universities supported by MPOWER and must demonstrate financial need.",link: "https://shorturl.at/cNjwE"},
+                {name: "3.NextGen Scholarship",degree:"Undergraduate",details: "Must demonstrate leadership potential and have a minimum 3.0 GPA.",link: "https://www.buddy4study.com/article/nextgen-edu-scholarship"}
+            ],
+            Germany: [
+                {name: "1.DAAD Scholarships (German Academic Exchange Service)",degree:"Master's and PhD programs.",details: "Open to graduates from developing countries, including India, with at least two years of relevant professional experience. ",link: "https://www2.daad.de/deutschland/stipendium/datenbank/en/21148-scholarship-database/"},
+                {name: "2.Friedrich Ebert Stiftung Scholarship",degree:"Bachelor's, Master’s, and PhD.",details: "Open to applicants with a commitment to social democracy, a solid academic background, and proficiency in German (for most courses).",link:"https://indonesia.fes.de/about-us/scholarship-programme-internships/page-1.html"}
+            ],
+            Singapore: [
+                {name: "1.Singapore International Graduate Award (SINGA)",degree:"Masters, PhD",details: "For research in science, technology, and engineering at leading Singaporean universities (NUS, NTU, SMU).",link:"https://www.a-star.edu.sg/Scholarships/For-Graduate-Studies/a-star-cis-scholarship"},
+                {name: "2.Nanyang President’s Graduate Scholarship (NPGS) at Nanyang Technological University (NTU)",degree:"PhD",details:"Open to all nationalities with a strong academic record, research experience, and a passion for innovative research. Applicants must have a bachelor’s degree with excellent results.",link: "https://www.ntu.edu.sg/admissions/graduate/financialmatters/scholarships/npgs"}
+            ],
+            Netherlands: [
+                {name: "1.Leiden University Excellence Scholarship (LExS)",degree:"Master’s programs.",details: "High-achieving students outside the EU applying for a master’s at Leiden University.",link : "https://www.universiteitleiden.nl/en/scholarships/sea/leiden-university-excellence-scholarship-lexs"},
+                {name: "2.Holland Scholarship",degree:"Bachelor’s and Master’s",details: "Open to non-EU/EEA international students applying to participating Dutch institutions. Applicants need to be in their first year of undergraduate or graduate studies.",link: "https://www.studyinnl.org/finances/nl-scholarship"}
+            ],
+            Switzerland: [
+                {name: "1.Swiss Government Excellence Scholarships",degree:"Research, Ph.D., and post-doctoral studies.",details: "Open to postgraduate students in various fields with a Master’s degree or equivalent. Age and academic performance criteria apply.",link: "https://www.sbfi.admin.ch/"},
+                {name: "2.ETH Zurich Excellence Scholarship & Opportunity Programe (ESOP)",degree:"Master’s degree.",details: "High-performing students applying for a Master’s program at ETH Zurich.",link: "https://ethz.ch/students/en/studies/financial/scholarships/excellencescholarship.html"}
+            ],
+            Finland: [
+                {name: "1.Finnish Government Scholarship Pool",degree: "Master's and Ph.D.",details: "Full tuition waiver, potential for living allowances and relocation grants.",link: "https://www.studyinfinland.fi/"},
+                {name: "2.CIMO Fellowship for Doctoral Studies",degree:"Doctoral research",details: "Open to doctoral students, with preference for joint-supervision programs",link: "https://www.irsjd.org/en/"}
+            ],
+            Ireland: [
+                {name: "1.Government of Ireland International Education Scholarships",degree:"Undergraduate, Master's, and Ph.D.",details: "Non-EU/EEA students with excellent academic records and leadership skills.",link: "https://hea.ie/policy/internationalisation/goi-ies/"},
+                {name: "2.University of Limerick Scholarships",degree:"Undergraduate and Master's",details: "International students meeting academic merit criteria.",link: "https://www.ul.ie/gps/scholarships-and-bursaries"}
+            ],
+            NewZealand: [
+                {name: "1.Manaaki New Zealand Government Scholarships",degree:"Undergraduate and postgraduate",details: "Open to citizens from selected countries. Must be at least 18 years old, have resided in your home country for at least two years, and meet health and COVID-19 vaccination requirements.",link:"https://www.nzscholarships.govt.nz/types-of-manaaki-scholarships/"},
+                {name: "2.University of Otago International Research Masters Scholarships",degree:"Masters",details: "International students undertaking a thesis-based Master’s degree.",link: "https://www.otago.ac.nz/courses/scholarships"}
+            ],
+            Norway: [
+                {name: "1.BI Presidential Scholarship",degree:"Masters",details: "International students applying for a Master's program at BI Norwegian Business School.",link: "https://www.bi.edu/programmes-and-individual-courses/scholarships/bi-presidential-scholarships/"},
+                {name: "2.University of Oslo Scholarships",degree:": Bachelor's, Master's, and PhD",details: "International students who meet specific academic requirements.",link: "https://www.uio.no/english/studies/admission/scholarships/index.html"}
+            ],
+            Sweden: [
+                {name: "1.Swedish Institute Scholarships for Global Professionals",degree:"Masters programs.",details: "Citizens of specific countries with demonstrated leadership experience and work experience relevant to their field. Must apply for an eligible master’s program.",link: "https://si.se/en/apply/scholarships/"},
+                {name: "2.Karlstad University Global Scholarship",degree:"Undergraduate and postgraduate programs.",details: "Students from outside the EU/EEA who are required to pay tuition fees.",link: "https://www.kau.se/en/education/explore-student-life/application-admission/scholarships"}
+            ],
+            Belgium: [
+                {name: "1.VLIR-UOS Scholarships",degree:"Master's and training programs",details: "Students from selected developing countries in Asia, Africa, and Latin America.",link: "https://www.vliruos.be/get-funded/study-scholarships"},
+                {name: "2.ARES Scholarships",degree:"Undergraduate, Master's, and training courses",details:"Nationals from developing countries.",link:"https://www.ares-ac.be/en/cooperation-au-developpement/scholarships/advanced-bachelor-s-and-master-s-degrees-or-continuing-education-courses-in-belgium"}
+            ],
+            Greece: [
+                {name:"1.Fulbright Greece Scholarships for Indian Students",degree:"Graduate, Ph.D., and postdoctoral research",details:"Indian students with a strong academic record and leadership qualities. Open across all fields and disciplines.",link:"https://www.fulbright.gr/en/"},
+                {name: "2.Aristotle University of Thessaloniki Scholarships",degree:"Undergraduate, Master’s, and Ph.D.",details:"Available to non-Greek nationals, including Indians, with high academic performance and interest in research or Greek studies.",link:"http://www.studyinromania.gov.ro/"},
+                {name: "3.National and Kapodistrian University of Athens Scholarship",degree:"Primarily for undergraduate studies in fields related to Greek culture (e.g., archaeology, literature)",details:"Non-Greek students, including Indian nationals under 27, who have strong academic backgrounds and a passion for Greek cultural studies.",link:"https://baag.uoa.gr/"}
+            ],
+            Turkey: [
+                {name: "1.Türkiye Scholarships (Turkish Government Scholarships)",degree:"Bachelor's, Master's, PhD",details:"Open to international students from all countries with specific academic criteria (e.g., 70% minimum for undergraduates). Age restrictions apply depending on the program level.",link:"https://www.turkiyeburslari.gov.tr/"},
+                {name: "2.Bilkent University Scholarships",degree:"Bachelor’s, Master’s, PhD",details:"Based on academic merit for international students.",link:"https://www.bilkent.edu.tr/"}
+            ],
+            Italy: [
+                {name: "1.Italian Government Scholarship",degree: "Master's and PhD",details: "Open to students from specific countries (including India); applicants must meet degree and language requirements.",link: "https://ambriga.esteri.it/en/news/dall_ambasciata/2024/05/italian-government-scholarships-ay-2024-2025/"},
+                {name: "2.University of Bologna Study Grants",degree: "Undergraduate and Master’s",details: "Open to international students who have taken standardized tests like SAT (for undergraduates) or GRE (for postgraduates).",link: "https://www.unibo.it/en/study/study-grants-and-subsidies/international-talents-unibo-scholarships-for-international-students"}
+            ],
+            Spain: [
+                {name: "1.Spanish Studies Abroad Financial Aid",degree: "Undergraduate and Graduate",details: "Open to international students with a dedicated interest in Spanish language and cultural studies.",link: ": https://spanishstudies.org/"},
+                {name: "2.Erasmus Mundus Joint Masters Scholarship",degree: "Graduate (Master's Programs)",details: "Open to both EU and non-EU students who are admitted into an Erasmus Mundus Joint Master's program, which includes Spain as one of the study destinations.",link: "https://ec.europa.eu/programmes/erasmus-plus/opportunities/individuals/students/joint-masters_en"}
+            ],
+            Hungary: [
+                {name: "1.Stipendium Hungaricum Scholarship",degree: "Available for Bachelor’s, Master’s, and Ph.D. degrees, along with preparatory and specialization courses.",details: "Open to students from partner countries, including India, with an excellent academic record.",link: "https://stipendiumhungaricum.hu/"},
+                {name: "2.Hungarian Diaspora Scholarship",degree: "Bachelor’s, Master’s, One-Tier Master’s, and Ph.D., plus non-degree options such as preparatory and specialization courses.",details: "Available to international students of Hungarian descent; selection is based on academic merit and commitment to community service.",link: "https://diasporascholarship.hu/"}
+            ],
+            Poland: [
+                {name: "1.Ignacy Łukasiewicz Scholarship Program.",degree: "Master’s degree",details: "Applicants must be from developing countries, have a relevant bachelor’s degree, and demonstrate a strong academic record.",link: "https://nawa.gov.pl/en/students/foreign-students/the-ignacy-lukasiewicz-scholarship-programme"}
+            ],
+            Romania: [
+                {name: "1.Romanian Government Scholarships.",degree: "Bachelor's, Master’s, and Ph.D.",details: " Open to non-EU students (excluding certain groups like those with Romanian origins). Applicants must meet academic requirements and be under 35 years for undergraduate/graduate and under 45 years for Ph.D.",link: "https://scholarships.studyinromania.gov.ro/"},
+                {name: "2.University of Bucharest Scholarships",degree: "Bachelor’s and Master’s",details: "International students who have been admitted to the University of Bucharest.",link: "https://unibuc.ro/international/scholarships-and-financial-aid-offered-by-the-university-of-bucharest/?lang=en"}
+            ],
+            Bulgaria: [
+                {name: "1.Bulgarian Government Scholarships.",degree: "Bachelor, Master’s, and PhD.",details: "Open to international students; details vary by program.",link: "http://www.mon.bg/"},
+                {name: "2.CEEPUS Scholarships",degree: "Bachelor, Master’s, and PhD.",details: "Open to students from Central and Eastern Europe.",link: "https://www.ceepus.info/"}
+            ],
+            France: [
+                {name: "1.Eiffel Excellence Scholarship Program",degree:"Master's and PhD.",details: "Open to international students under 25 for Master's and under 30 for PhD. Candidates must be enrolled in a French institution.",link: "https://www.campusfrance.org/"},
+                {name: "2.Charpak Scholarship",degree: "Bachelor's, Master's, and Research",details: "Indian nationals under 30 years, who have applied for an eligible course in France.",link : "https://www.inde.campusfrance.org/en/page/charpak"},
+                {name: "3.Franco-Indian Education Trust Scholarships.",degree: "Various (specific scholarships for management, arts, etc.).",details: "Specific criteria based on income and field of study; details vary by scholarship.",link: "https://www.indembassy.gov.in/"}
+            ],
+            Portugal: [
+                {name: "1.Portuguese Government Scholarships",degree: "Bachelor’s, Master’s, and Doctorate.",details: "International students, including Indian students, must apply through specific universities and meet their admission requirements.",link: "https://www.studyinportugalnetwork.com/"},
+                {name: "Fundação para a Ciência e a Tecnologia (FCT) Scholarships",degree: "PhD",details: "Open to international students who are accepted into FCT-funded PhD programs.",link: "https://www.fct.pt/"}
+            ],
+            Estonia: [
+                {name: "1.Estonian Government Scholarships.",degree: "Master’s and Doctorate.",details: "Open to international students from non-EU countries, including India. Applicants must meet the requirements set by the Estonian Ministry of Education and Research.",link : "https://www.studyinestonia.ee/study/scholarships"},
+                {name: "2.University of Tartu Scholarships.",degree: "Bachelor’s and Master’s.",details: "International students who meet the entry requirements for their chosen program.",link: "https://ut.ee/en/content/EACH-scholarships"}
+            ],
+            China: [
+                {name: "1.Chinese Government Scholarship (CSC).",degree: "Bachelor’s, Master’s, or Ph.D. programs at designated Chinese institutions.",details: "This comprehensive scholarship covers full or partial tuition, accommodation, medical insurance, and provides a monthly stipend (up to RMB 3,000 for postgraduates).",link: "https://www.campuschina.org/"},
+                {name: "2.Beijing Government Scholarship.",degree: "Undergraduate and Master’s students, and three years for Ph.D. students.",details: ": Aimed at students studying at Beijing universities, this scholarship covers up to one year of full tuition.",link: "https://english.beijing.gov.cn/studyinginbeijing/index.html"},
+                {name: "3.Fujian Government Scholarship.",degree: "Undergraduates to Ph.D. candidates.",details: "This program offers various scholarships up to RMB 60,000 per year for students in Fujian province.",link: "https://www.campuschina.org/"}
+            ],
+            SouthKorea: [
+                {name: "1.Global Korea Scholarship (GKS) / Korean Government Scholarship Program (KGSP).",degree: "Undergraduate and graduate students",details: "Monthly allowance (KRW 900,000 for undergraduates and KRW 1,000,000 for graduates),Settlement and repatriation allowances,Medical insurance coverage.",link: "https://gksscholarship.com/"},
+                {name: "2.Korea University Global KU Scholarship.",degree: "International undergraduate and graduate students.",details: "Full or partial tuition coverage,Living expenses depending on academic performance and department",link : "https://gsc.korea.ac.kr/usr/international/scolarships.do"},
+                {name: "3.Korean Advanced Institute of Science and Technology (KAIST) Undergraduate Scholarships.",degree: "Undergraduate degree",details: "Full tuition fees waived,Monthly stipend,Health insurance.",link : "https://www.kaist.ac.kr/en/html/edu/03100502.html"}
+            ],
+            Taiwan: [
+                {name: "1.Taiwan Scholarship Program ",degree: "undergraduate,master’s and doctoral students.",details: "The scholarship duration is up to 4 years for undergraduates, 2 years for master’s, and 4 years for doctoral studies.",link : "https://english.moe.gov.tw/lp-24-1.html"},
+                {name: "2.National Taiwan University (NTU) Outstanding International Graduate Student Scholarship",degree: "master’s and Ph.D. students.",details: "This university-specific scholarship waives tuition fees and provides monthly stipends of NTD 6,000 for master’s students and NTD 8,000 for Ph.D. students.",link : "https://admissions.ntu.edu.tw/overseas-students/"}
+            ]
+
+        };
+
+        let selectedCountry = ""; // Variable to store the selected country
+
+        document.getElementById('exam-status').addEventListener('change', function() {
+            const examStatus = this.value;
+            const countrySearchSection = document.getElementById('country-search-section');
+            const checkButton = document.getElementById('check-button');
+            if (examStatus === 'yes') {
+                countrySearchSection.style.display = 'block'; // Show the country search
+                checkButton.innerText = "Show Available Countries"; // Change button text
+                document.getElementById('show-scholarships-section').style.display = 'none'; // Hide the Show Scholarships button initially
+            } else {
+                countrySearchSection.style.display = 'none'; // Hide the country search if "No" is selected
+                checkButton.innerText = "Check Availability"; // Reset button text
+                document.getElementById('show-scholarships-section').style.display = 'none'; // Hide the Show Scholarships button
+            }
+            document.getElementById('scholarship-section').style.display = 'none';
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('scholarship-results').innerHTML = "";
+            selectedCountry = ""; // Reset selected country
+        });
+
+        function checkEligibility() {
+            const examStatus = document.getElementById('exam-status').value;
+            const result = document.getElementById('result');
+
+            if (examStatus === "yes") {
+                // Clear previous results
+                result.innerHTML = ""; // Clear result section
+                selectedCountry = ""; // Reset selected country
+
+                // Show available countries when button is clicked
+                const countryList = document.getElementById('country-list');
+                countryList.innerHTML = ""; // Clear current list
+
+                // Sort countries alphabetically
+                const sortedCountries = Object.keys(scholarshipsData).sort();
+
+                // Show all countries
+                sortedCountries.forEach(country => {
+                    countryList.innerHTML += `<li onclick="selectCountry('${country}')"><strong>${country}</strong></li>`;
+                });
+
+                countryList.style.display = 'block'; // Show the country list
+            } else if (examStatus === "no") {
+                result.innerHTML = `
+                    <h3>How to Take the TOEFL or GRE</h3>
+                    <p>If you haven't taken the TOEFL or GRE yet, here are the steps to get started:</p>
+                    <ul>
+                        <li><strong>TOEFL:</strong> Register at <a href="https://www.ets.org/toefl" target="_blank">ETS TOEFL</a> and schedule your test.</li>
+                        <li><strong>GRE:</strong> Register at <a href="https://www.ets.org/gre" target="_blank">ETS GRE</a> and choose your preferred test date.</li>
+                    </ul>
+                `;
+            }
+        }
+
+        function filterCountries() {
+            const searchTerm = document.getElementById('country-search').value.toLowerCase();
+            const countryList = document.getElementById('country-list');
+            countryList.innerHTML = ""; // Clear the list before filtering
+            const filteredCountries = Object.keys(scholarshipsData).filter(country => country.toLowerCase().includes(searchTerm));
+
+            filteredCountries.forEach(country => {
+                countryList.innerHTML += `<li onclick="selectCountry('${country}')"><strong>${country}</strong></li>`;
+            });
+
+            countryList.style.display = filteredCountries.length ? 'block' : 'none';
+        }
+
+        function selectCountry(country) {
+            document.getElementById('country-search').value = country;
+            document.getElementById('country-list').innerHTML = ""; // Clear the list after selection
+            selectedCountry = country; // Set selected country
+            document.getElementById('show-scholarships-section').style.display = 'block'; // Show the Show Scholarships button
+            
+            // Hide the Show Available Countries button
+            document.getElementById('check-button').style.display = 'none'; // Hide the button after selection
+        }
+
+        function showScholarships() {
+            const scholarshipResults = document.getElementById('scholarship-results');
+            scholarshipResults.innerHTML = ""; // Clear previous results
+            if (scholarshipsData[selectedCountry]) {
+                scholarshipsData[selectedCountry].forEach(scholarship => {
+                    scholarshipResults.innerHTML += `
+                        <div>
+                            <h4>${scholarship.name}</h4>
+                            <p>${scholarship.degree}</p>
+                            <p>${scholarship.details}</p>
+                            <a href="${scholarship.link}" target="_blank">Learn More</a>
+                        </div>
+                    `;
+                });
+                document.getElementById('scholarship-section').style.display = 'block'; // Show scholarship section
+            } else {
+                scholarshipResults.innerHTML = `<p>No scholarships found for this country.</p>`;
+                document.getElementById('scholarship-section').style.display = 'block'; // Show scholarship section if no results
+            }
+        }
+    </script>
+
+</body>
+</html>
