@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRE & TOEFL Country Information</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Section Styles */
+        .exam-section, .country-info-section {
+            display: none;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #0056b3;
+        }
+
+        /* Dropdown and Radio Styles */
+        .options {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .options select,
+        .options input[type="radio"] {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GRE & TOEFL Country Information</h1>
+        
+        <!-- First Question: Have you taken an exam? -->
+        <div class="options">
+            <p>Have you already taken an exam?</p>
+            <input type="radio" id="takenYes" name="taken" value="yes" onclick="handleTakenSelection()"> Yes
+            <input type="radio" id="takenNo" name="taken" value="no" onclick="handleTakenSelection()"> No
+        </div>
+
+        <!-- Dropdown to Choose Exam -->
+        <div class="options" id="examSelectDiv" style="display: none;">
+            <label for="examSelect">Choose an Exam:</label>
+            <select id="examSelect" onchange="showExamInfo()">
+                <option value="">Select</option>
+                <option value="gre">GRE</option>
+                <option value="toefl">TOEFL</option>
+            </select>
+        </div>
+
+        <!-- Country Information Section -->
+        <div id="countryInfoGRE" class="country-info-section">
+            <h2>Countries Accepting GRE Scores</h2>
+            <p>GRE scores are accepted in over 160 countries for graduate studies.</p>
+        </div>
+
+        <div id="countryInfoTOEFL" class="country-info-section">
+            <h2>Countries Accepting TOEFL Scores</h2>
+            <p>TOEFL scores are accepted in over 150 countries for university admissions.</p>
+        </div>
+
+        <!-- Full Exam Information Sections (Only if "No" is Selected) -->
+        <div id="gre" class="exam-section">
+            <h2>Graduate Record Examination (GRE)</h2>
+            <p>The GRE is a standardized test used for admissions in various graduate programs worldwide. It assesses verbal reasoning, quantitative reasoning, and analytical writing skills.</p>
+            <div class="important-links">
+                <h3>Important Links:</h3>
+                <ul>
+                    <li><a href="https://www.ets.org/gre" target="_blank">Official GRE Website</a></li>
+                    <li><a href="https://www.ets.org/gre/revised_general/prepare" target="_blank">GRE Preparation Resources</a></li>
+                    <li><a href="https://www.ets.org/gre/subject/about" target="_blank">GRE Subject Tests</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="toefl" class="exam-section">
+            <h2>Test of English as a Foreign Language (TOEFL)</h2>
+            <p>The TOEFL is an English language proficiency test required for non-native English speakers applying to English-speaking universities. It evaluates reading, listening, speaking, and writing skills.</p>
+            <div class="important-links">
+                <h3>Important Links:</h3>
+                <ul>
+                    <li><a href="https://www.ets.org/toefl" target="_blank">Official TOEFL Website</a></li>
+                    <li><a href="https://www.ets.org/toefl/test-takers/ibt/prepare.html" target="_blank">TOEFL Preparation Resources</a></li>
+                    <li><a href="https://www.ets.org/toefl/test-takers/ibt/register" target="_blank">TOEFL Registration</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle the selection if user has taken an exam
+        function handleTakenSelection() {
+            var takenYes = document.getElementById("takenYes").checked;
+            var examSelectDiv = document.getElementById("examSelectDiv");
+            var greSection = document.getElementById("gre");
+            var toeflSection = document.getElementById("toefl");
+            var countryInfoGRE = document.getElementById("countryInfoGRE");
+            var countryInfoTOEFL = document.getElementById("countryInfoTOEFL");
+
+            // Hide all sections initially
+            examSelectDiv.style.display = "none";
+            greSection.style.display = "none";
+            toeflSection.style.display = "none";
+            countryInfoGRE.style.display = "none";
+            countryInfoTOEFL.style.display = "none";
+
+            // Show dropdown to choose GRE or TOEFL if "Yes" or "No" is selected
+            if (takenYes) {
+                examSelectDiv.style.display = "block";
+            } else {
+                examSelectDiv.style.display = "block";
+            }
+        }
+
+        // Function to display the selected exam information
+        function showExamInfo() {
+            var selectedExam = document.getElementById("examSelect").value;
+            var takenYes = document.getElementById("takenYes").checked;
+            var greSection = document.getElementById("gre");
+            var toeflSection = document.getElementById("toefl");
+            var countryInfoGRE = document.getElementById("countryInfoGRE");
+            var countryInfoTOEFL = document.getElementById("countryInfoTOEFL");
+
+            // Hide all sections initially
+            greSection.style.display = "none";
+            toeflSection.style.display = "none";
+            countryInfoGRE.style.display = "none";
+            countryInfoTOEFL.style.display = "none";
+
+            // Show only country info if "Yes" is selected, else show full exam info
+            if (selectedExam === "gre") {
+                if (takenYes) {
+                    countryInfoGRE.style.display = "block";
+                } else {
+                    greSection.style.display = "block";
+                }
+            } else if (selectedExam === "toefl") {
+                if (takenYes) {
+                    countryInfoTOEFL.style.display = "block";
+                } else {
+                    toeflSection.style.display = "block";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
