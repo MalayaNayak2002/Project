@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRE & TOEFL Country Information</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: #0056b3;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #003f7f;
+        }
+
+        .country-info-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .scholarship-info {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GRE & TOEFL Country Information</h1>
+
+        <!-- Dropdown Bar for Exam Selection -->
+        <div class="content">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="exam-status">Have you appeared for TOEFL or GRE?</label>
+                    <select id="exam-status" onchange="handleExamStatusChange()">
+                        <option value="">-- Select an option --</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dropdown to Choose Exam -->
+            <div id="examSelectionDiv" style="display: none;" class="form-section">
+                <label for="examDropdown">Choose an Exam:</label>
+                <select id="examDropdown" onchange="showExamInfo()">
+                    <option value="">Select</option>
+                    <option value="gre">GRE</option>
+                    <option value="toefl">TOEFL</option>
+                </select>
+            </div>
+
+            <!-- Country Information Sections with Dropdown -->
+            <div id="countryInfoGRE" class="country-info-section">
+                <h2>Countries Accepting GRE Scores</h2>
+                <label for="countryDropdownGRE">Select a Country:</label>
+                <select id="countryDropdownGRE" onchange="displayScholarshipInfo('gre')">
+                    <option value="">Select</option>
+                </select>
+                <div id="scholarshipInfoGRE" class="scholarship-info"></div>
+                <button id="okButtonGRE" class="btn" style="display: none;" onclick="redirectToCountryInfo('gre')">OK</button>
+            </div>
+
+            <div id="countryInfoTOEFL" class="country-info-section">
+                <h2>Countries Accepting TOEFL Scores</h2>
+                <label for="countryDropdownTOEFL">Select a Country:</label>
+                <select id="countryDropdownTOEFL" onchange="displayScholarshipInfo('toefl')">
+                    <option value="">Select</option>
+                </select>
+                <div id="scholarshipInfoTOEFL" class="scholarship-info"></div>
+                <button id="okButtonTOEFL" class="btn" style="display: none;" onclick="redirectToCountryInfo('toefl')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // List of countries and scholarship info
+        const countries = ["Australia", "Canada", "France", "Germany", "India", "Japan", "South Korea", "United Kingdom", "United States"];
+        const scholarshipInfo = {
+            "gre": {
+                "United States": "Available scholarships for GRE include Fulbright, AAUW, and various university-specific scholarships.",
+                "Canada": "Canada offers several scholarships like Vanier CGS and university-specific GRE-based scholarships.",
+                // Add more country-specific GRE scholarship information
+            },
+            "toefl": {
+                "United States": "Available TOEFL-based scholarships include the Fulbright, Amideast, and university-specific awards.",
+                "Germany": "DAAD scholarships are available for students with TOEFL requirements.",
+                // Add more country-specific TOEFL scholarship information
+            }
+        };
+
+        const countryLinks = {
+            "gre": {
+                "United States": "https://example.com/gre/united-states",
+                "Canada": "https://example.com/gre/canada",
+                // Add links to more country-specific GRE info pages
+            },
+            "toefl": {
+                "United States": "https://example.com/toefl/united-states",
+                "Germany": "https://example.com/toefl/germany",
+                // Add links to more country-specific TOEFL info pages
+            }
+        };
+
+        // Handle the exam status selection (Yes or No)
+        function handleExamStatusChange() {
+            const examStatus = document.getElementById("exam-status").value;
+            document.getElementById("examSelectionDiv").style.display = examStatus === "yes" ? "block" : "none";
+            document.getElementById("countryInfoGRE").style.display = "none";
+            document.getElementById("countryInfoTOEFL").style.display = "none";
+        }
+
+        // Show exam information based on selection
+        function showExamInfo() {
+            const selectedExam = document.getElementById("examDropdown").value;
+            document.getElementById("countryInfoGRE").style.display = selectedExam === "gre" ? "block" : "none";
+            document.getElementById("countryInfoTOEFL").style.display = selectedExam === "toefl" ? "block" : "none";
+            generateCountryList(selectedExam);
+        }
+
+        // Generate sorted country list dropdown for GRE or TOEFL with "Select" placeholder
+        function generateCountryList(exam) {
+            const countryDropdown = document.getElementById(exam === 'gre' ? "countryDropdownGRE" : "countryDropdownTOEFL");
+            const sortedCountries = countries.slice().sort();
+            countryDropdown.innerHTML = `<option value="">Select</option>` + sortedCountries.map(country => `<option value="${country}">${country}</option>`).join('');
+        }
+
+        // Display scholarship information based on selected country and exam
+        function displayScholarshipInfo(exam) {
+            const selectedCountry = document.getElementById(exam === 'gre' ? "countryDropdownGRE" : "countryDropdownTOEFL").value;
+            const scholarshipInfoDiv = document.getElementById(exam === 'gre' ? "scholarshipInfoGRE" : "scholarshipInfoTOEFL");
+            const okButton = document.getElementById(exam === 'gre' ? "okButtonGRE" : "okButtonTOEFL");
+
+            if (scholarshipInfo[exam][selectedCountry]) {
+                scholarshipInfoDiv.innerHTML = `<p><strong>Scholarship Information:</strong> ${scholarshipInfo[exam][selectedCountry]}</p>`;
+                okButton.style.display = "block";
+            } else {
+                scholarshipInfoDiv.innerHTML = "<p>No specific scholarship information available for this country.</p>";
+                okButton.style.display = "none";
+            }
+        }
+
+        // Redirect to country information page
+        function redirectToCountryInfo(exam) {
+            const selectedCountry = document.getElementById(exam === 'gre' ? "countryDropdownGRE" : "countryDropdownTOEFL").value;
+            const link = countryLinks[exam][selectedCountry];
+            if (link) {
+                window.location.href = link;
+            } else {
+                alert("No information page available for the selected country.");
+            }
+        }
+    </script>
+</body>
+</html>
