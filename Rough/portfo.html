@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="avatar">
+          <img src="/photo.jpg" alt="Your Name">
+        </div>
+        <div>
+          <div style="font-weight:800">Your Name</div>
+          <div class="muted" style="font-size:12px">MCA Student • Fresher</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a href="#resume">Resume</a>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero">
+      <div class="intro">
+        <div class="eyebrow">Hello — I'm</div>
+        <h1>Your Name<span style="color:var(--accent)">.</span></h1>
+        <p class="lead">I am a MCA student passionate about learning web development and programming. As a fresher, I'm eager to explore new technologies and build my skills step by step.</p>
+
+        <!-- About Section -->
+        <section id="about">
+          <h2 style="text-align: center; color: #FFD700;">About Me</h2>
+          <div style="margin-top:18px" class="card">
+            <p class="muted">I'm currently pursuing Masters in Computer Application. I enjoy coding and want to start my career in software development. Looking forward to internships and learning opportunities.</p>
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+          <h2 style="text-align: center; color: #FFD700;">Education</h2>
+          <div class="card">
+            <p><strong>Degree:</strong> MCA</p>
+            <p><strong>College:</strong> NIST University</p>
+            <p><strong>CGPA:</strong> 8.5</p>
+            <p><strong>Passing Year:</strong> 2025</p>
+          </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+          <h2 style="margin-bottom:18px; text-align: center; color: #FFD700;">Projects</h2>
+          <div class="card">
+            <h4>Amazon Clone Website</h4>
+            <p class="muted">
+              A static clone of Amazon built using only <strong>HTML</strong> and <strong>CSS</strong>. 
+              Designed to practice layout building, navigation menus, product cards, and responsive design basics.
+            </p>
+            <p>🔗 <a href="https://github.com/yourusername/amazon-clone" target="_blank">View on GitHub</a></p>
+          </div>
+          <div class="card">
+            <h4>Personal Portfolio Website</h4>
+            <p class="muted">
+              A responsive portfolio website (this one!) created with <strong>HTML</strong> and <strong>CSS</strong>. 
+              It highlights my skills, contact information, and serves as a platform to showcase my future projects.
+            </p>
+            <p>🔗 <a href="https://github.com/yourusername/portfolio" target="_blank">View on GitHub</a></p>
+          </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+          <h2>Skills & Learnings</h2>
+          <ul>
+            <li><strong>HTML & CSS</strong> – Good understanding of building static websites</li>
+            <li><strong>Python</strong> – Basics of programming and problem solving</li>
+            <li><strong>SQL</strong> – Basic database queries and data handling</li>
+            <li><strong>Learning:</strong> JavaScript for interactivity</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="profile-card">
+        <div class="avatar">
+          <img src="/photo.jpg" alt="Your Name">
+        </div>
+        <div class="meta">
+          <h3>Your Name</h3>
+          <div class="muted">MCA Student</div>
+        </div>
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px">
+            <div style="flex:1" class="card">
+              <div class="muted" style="font-size:12px">Experience</div>
+              <div style="font-weight:800">Fresher</div>
+            </div>
+            <div style="flex:1" class="card">
+              <div class="muted" style="font-size:12px">Location</div>
+              <div style="font-weight:800">Berhampur</div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="card" style="text-align:center">
+            <div class="muted"><h2 style="color: #FFD700;">Contact</h2></div>
+            <div style="margin-top:8px;font-weight:700">yourname@email.com</div>
+            <div class="muted" style="font-size:13px;margin-top:6px">Open for internship opportunities</div>
+          </div>
+
+          <!-- Socials -->
+          <div class="card" style="text-align:center">
+            <div class="socials">
+              <div class="muted"><h2 style="color: #FFD700;">Socials</h2></div>
+              <a href="http://www.linkedin.com/in/your-linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="https://github.com/yourusername" target="_blank"><i class="fab fa-github"></i></a>
+              <a href="mailto:yourname@email.com"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+
+          <!-- Resume -->
+          <section id="resume" class="card" style="text-align:center">
+            <h2 style="color: #FFD700;">Resume</h2>
+            <p>You can download my resume using the button below:</p>
+            <a href="/Your_Name_Resume.pdf" download class="btn">📄 Download Resume</a>
+          </section>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      © <span id="year">2025</span> Your Name — Built with only HTML & CSS.
+    </footer>
+  </div>
+</body>
+</html>
